@@ -2,19 +2,21 @@
 name = "rpc"
 version = "0.1.0"
 authors = ["Ethcore <admin@ethcore.io>"]
+edition = "2018"
 
 [lib]
 
 [dependencies]
+bigint = "1.0"
 log = "0.4"
 serde = "1.0"
 serde_json = "1.0"
 serde_derive = "1.0"
 rustc-hex = "2"
-tokio-core = "0.1.1"
-jsonrpc-core = { git = "https://github.com/ethcore/jsonrpc.git" }
-jsonrpc-macros = { git = "https://github.com/ethcore/jsonrpc.git" }
-jsonrpc-http-server = { git = "https://github.com/ethcore/jsonrpc.git" }
+tokio-core = "0.1.17"
+jsonrpc-core = { git = "https://github.com/ethcore/jsonrpc.git", version = "9.0" }
+jsonrpc-macros = { git = "https://github.com/ethcore/jsonrpc.git", version = "9.0" }
+jsonrpc-http-server = { git = "https://github.com/ethcore/jsonrpc.git", version = "9.0" }
 
 sync = { path = "../sync" }
 serialization = { path = "../serialization" }

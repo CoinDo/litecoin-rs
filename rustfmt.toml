@@ -1,0 +1,7 @@
+edition = "2018"
+
+format_doc_comments = true
+version = "Two"
+comment_width = 100
+wrap_comments = true
+format_strings = true

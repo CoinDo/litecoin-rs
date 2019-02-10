@@ -2,9 +2,11 @@
 name = "verification"
 version = "0.1.0"
 authors = ["Nikolay Volf <nikvolf@gmail.com>"]
+edition = "2018"
 
 [dependencies]
 time = "0.1"
+bigint = "1.0"
 lazy_static = "1.0"
 log = "0.4"
 rayon = "1.0"

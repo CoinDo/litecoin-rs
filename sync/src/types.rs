@@ -1,18 +1,18 @@
-use std::sync::Arc;
+use crate::local_node::LocalNode;
+use crate::synchronization_client::SynchronizationClient;
+use crate::synchronization_executor::LocalSynchronizationTaskExecutor;
+use crate::synchronization_peers::Peers;
+use crate::synchronization_server::ServerImpl;
+use crate::synchronization_verifier::AsyncVerifier;
+use crate::utils::SynchronizationState;
+use crate::SyncListener;
 use futures::Future;
-use parking_lot::{Mutex, RwLock};
-use storage;
-use local_node::LocalNode;
 use miner::MemoryPool;
-use super::SyncListener;
-use synchronization_client::SynchronizationClient;
-use synchronization_executor::LocalSynchronizationTaskExecutor;
-use synchronization_peers::Peers;
-use synchronization_server::ServerImpl;
-use synchronization_verifier::AsyncVerifier;
-use utils::SynchronizationState;
+use parking_lot::{Mutex, RwLock};
+use std::sync::Arc;
+use storage;
 
-pub use utils::BlockHeight;
+pub use crate::utils::BlockHeight;
 
 /// Network request id
 pub type RequestId = u32;
@@ -21,7 +21,7 @@ pub type RequestId = u32;
 pub type PeerIndex = usize;
 
 // No-error, no-result future
-pub type EmptyBoxFuture = Box<Future<Item=(), Error=()> + Send>;
+pub type EmptyBoxFuture = Box<Future<Item = (), Error = ()> + Send>;
 
 /// Reference to storage
 pub type StorageRef = storage::SharedStore;
@@ -48,7 +48,13 @@ pub type ClientCoreRef<T> = Arc<Mutex<T>>;
 pub type ServerRef<T> = Arc<T>;
 
 /// Reference to local node
-pub type LocalNodeRef = Arc<LocalNode<LocalSynchronizationTaskExecutor, ServerImpl, SynchronizationClient<LocalSynchronizationTaskExecutor, AsyncVerifier>>>;
+pub type LocalNodeRef = Arc<
+    LocalNode<
+        LocalSynchronizationTaskExecutor,
+        ServerImpl,
+        SynchronizationClient<LocalSynchronizationTaskExecutor, AsyncVerifier>,
+    >,
+>;
 
 /// Synchronization events listener reference
 pub type SyncListenerRef = Box<SyncListener>;

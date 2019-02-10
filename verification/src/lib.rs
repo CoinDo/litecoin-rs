@@ -51,26 +51,8 @@
 //! so instead we might want to call AcceptMemoryPoolTransaction on each tx
 //! that is inserted into assembled block
 
-extern crate time;
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate log;
-extern crate parking_lot;
-extern crate rayon;
-
-extern crate storage;
-extern crate chain;
-extern crate network;
-extern crate primitives;
-extern crate serialization as ser;
-extern crate script;
-extern crate bitcrypto as crypto;
-#[cfg(test)]
-extern crate db;
-
-pub mod constants;
 mod canon;
+pub mod constants;
 mod deployments;
 mod error;
 mod sigops;
@@ -93,38 +75,38 @@ mod accept_transaction;
 // backwards compatibility
 mod chain_verifier;
 
-pub use primitives::{bigint, hash, compact};
+pub use crate::accept_block::BlockAcceptor;
+pub use crate::accept_chain::ChainAcceptor;
+pub use crate::accept_header::HeaderAcceptor;
+pub use crate::accept_transaction::{MemoryPoolTransactionAcceptor, TransactionAcceptor};
+pub use crate::canon::{CanonBlock, CanonHeader, CanonTransaction};
 
-pub use canon::{CanonBlock, CanonHeader, CanonTransaction};
-pub use accept_block::BlockAcceptor;
-pub use accept_chain::ChainAcceptor;
-pub use accept_header::HeaderAcceptor;
-pub use accept_transaction::{TransactionAcceptor, MemoryPoolTransactionAcceptor};
+pub use crate::verify_block::BlockVerifier;
+pub use crate::verify_chain::ChainVerifier;
+pub use crate::verify_header::HeaderVerifier;
+pub use crate::verify_transaction::{MemoryPoolTransactionVerifier, TransactionVerifier};
 
-pub use verify_block::BlockVerifier;
-pub use verify_chain::ChainVerifier;
-pub use verify_header::HeaderVerifier;
-pub use verify_transaction::{TransactionVerifier, MemoryPoolTransactionVerifier};
-
-pub use chain_verifier::BackwardsCompatibleChainVerifier;
-pub use error::{Error, TransactionError};
-pub use sigops::transaction_sigops;
-pub use timestamp::{median_timestamp, median_timestamp_inclusive};
-pub use work::{work_required, is_valid_proof_of_work, is_valid_proof_of_work_hash, block_reward_satoshi};
-pub use deployments::Deployments;
+pub use crate::chain_verifier::BackwardsCompatibleChainVerifier;
+pub use crate::deployments::Deployments;
+pub use crate::error::{Error, TransactionError};
+pub use crate::sigops::transaction_sigops;
+pub use crate::timestamp::{median_timestamp, median_timestamp_inclusive};
+pub use crate::work::{
+    block_reward_satoshi, is_valid_proof_of_work, is_valid_proof_of_work_hash, work_required,
+};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 /// Blocks verification level.
 pub enum VerificationLevel {
-	/// Full verification.
-	Full,
-	/// Transaction scripts are not checked.
-	Header,
-	/// No verification at all.
-	NoVerification,
+    /// Full verification.
+    Full,
+    /// Transaction scripts are not checked.
+    Header,
+    /// No verification at all.
+    NoVerification,
 }
 
 /// Interface for block verification
-pub trait Verify : Send + Sync {
-	fn verify(&self, level: VerificationLevel, block: &chain::IndexedBlock) -> Result<(), Error>;
+pub trait Verify: Send + Sync {
+    fn verify(&self, level: VerificationLevel, block: &chain::IndexedBlock) -> Result<(), Error>;
 }
